@@ -56,6 +56,14 @@ impl<T: Ord> Subtree<T> {
     }
 
     fn has(&self, value: &T) -> bool {
+        match &self.0  {
+            None => false,
+            Some(root) => match value.cmp(&root.value) {
+                Ordering::Less => root.left.has(value),
+                Ordering::Greater => root.right.has(value),
+                Ordering::Equal => true,
+            } 
+        };
         false
     }
 
