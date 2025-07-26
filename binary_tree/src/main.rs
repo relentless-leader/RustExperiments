@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 #[derive(Debug)]
 struct Node<T: Ord> {
     left: Subtree<T>,
@@ -6,27 +8,66 @@ struct Node<T: Ord> {
 }
 
 #[derive(Debug)]
-struct Subtree<T>(Option<Box<Node<T>>>);
+struct Subtree<T: Ord>(Option<Box<Node<T>>>);
 
 #[derive(Debug)]
 struct BinaryTree<T: Ord> {
+     root: Subtree<T>,
+}
+
+impl<T: Ord> BinaryTree<T> { 
     fn new() -> Self {
         Self { root: Subtree::new() }
     }
 
-    fn insert(&mut Self, value: T) {
+    fn insert(&mut self, value: T) {
         self.root.insert(value);
     }
 
-    fn has(&Self, value: &T) -> bool {
+    fn has(&self, value: &T) -> bool {
         self.root.has(value)
     }
 
-    fn len(&Self) -> usize {
+    fn len(&self) -> usize {
         self.root.len()
     }
 }
 
+impl<T: Ord> Subtree<T> {
+    fn new() -> Self {
+        Self(None)
+    }
+
+    fn insert(&mut self, value: T) {
+        if self.0.is_none() {
+            self.0 = Some(Box::new(Node {
+                left: Subtree::new(),
+                right: Subtree::new(),
+                value: value,
+            }));
+        } else {
+            let root = self.0.as_mut().unwrap();
+            if value < root.value {
+                root.left.insert(value)
+            } else if value > root.value {
+                root.right.insert(value)
+            }
+        }
+    }
+
+    fn has(&self, value: &T) -> bool {
+        false
+    }
+
+    fn len(&self) -> usize {
+        usize::MAX
+    }
+}
+
+
 fn main() {
     println!("hello");
+    let mut tree = BinaryTree::<i32>::new();
+    tree.insert(10);
+    println!("Hello 2")
 }
