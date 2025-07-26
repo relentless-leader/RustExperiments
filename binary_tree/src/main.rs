@@ -62,9 +62,8 @@ impl<T: Ord> Subtree<T> {
                 Ordering::Less => root.left.has(value),
                 Ordering::Greater => root.right.has(value),
                 Ordering::Equal => true,
-            } 
-        };
-        false
+            }, 
+        }
     }
 
     fn len(&self) -> usize {
@@ -80,7 +79,25 @@ impl<T: Ord> Subtree<T> {
 
 fn main() {
     println!("hello");
-    let mut tree = BinaryTree::<i32>::new();
-    tree.insert(10);
-    println!("Hello 2")
+    let mut tree = BinaryTree::new();
+    println!("Hello tree: {:?}", tree);
+    println!("Hello tree: {:?}", tree.len());
+    tree.insert(1);
+    println!("Hello tree: {:?}", tree);
+    tree.insert(2);
+    println!("Hello tree: {:?}", tree);
+    tree.insert(8);
+    println!("Hello tree: {:?}", tree);
+    println!("Hello tree: {:?}", tree.len());
+    tree.insert(4);
+    println!("Hello tree: {:?}", tree);
+    tree.insert(14);
+    println!("Hello tree: {:?}", tree);
+    tree.insert(3);
+    println!("Hello tree: {:?}", tree);
+    tree.insert(7);
+    println!("Hello tree: {:?}", tree);
+    println!("Hello tree: {:?}", tree.has(&10));
+    println!("Hello tree: {:?}", tree.has(&8));
+    println!("Hello tree: {:?}", tree.len());
 }
