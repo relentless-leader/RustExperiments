@@ -68,7 +68,12 @@ impl<T: Ord> Subtree<T> {
     }
 
     fn len(&self) -> usize {
-        usize::MAX
+        match &self.0 {
+            None => 0,
+            Some(current) => {
+                1 + current.left.len() + current.right.len()
+            }
+        }
     }
 }
 
