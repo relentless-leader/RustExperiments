@@ -1,41 +1,32 @@
 #[derive(Debug)]
-struct Node {
-    left: Option<Box<Node>>,
-    right: Option<Box<Node>>,
-    value: i32,
+struct Node<T: Ord> {
+    left: Subtree<T>,
+    right: Subtree<T>,
+    value: T,
 }
 
-fn insert_left(current: &mut Node, val: i32) {
-    println!("Hello current: {:p}", &current);
-    let left = Node {
-        left: None,
-        right: None,
-        value: val
-    };
-    current.left = Some(Box::new(left));
-}
+#[derive(Debug)]
+struct Subtree<T>(Option<Box<Node<T>>>);
 
-fn insert_right(current: &mut Node, val: i32) {
-    println!("Hello current: {:p}", &current);
-    let right = Node {
-        left: None,
-        right: None,
-        value: val
-    };
-    current.right = Some(Box::new(right));
+#[derive(Debug)]
+struct BinaryTree<T: Ord> {
+    fn new() -> Self {
+        Self { root: Subtree::new() }
+    }
+
+    fn insert(&mut Self, value: T) {
+        self.root.insert(value);
+    }
+
+    fn has(&Self, value: &T) -> bool {
+        self.root.has(value)
+    }
+
+    fn len(&Self) -> usize {
+        self.root.len()
+    }
 }
 
 fn main() {
-    let mut root = Node {
-        left: None,
-        right: None,
-        value: 10
-    };
-    println!("Hello root ref: {:p}", &root);
-    insert_left(&mut root, 12);
-    println!("Hello root: {:?}", root);
-    println!("Hello root ref: {:p}", &root);
-    println!("Hello root.left: {:?}", root.left);
-    println!("Hello root.left ref: {:p}", &root.left);
-    println!("Hello root.left ref: {:p}", &*root.left.unwrap());
+    println!("hello");
 }
