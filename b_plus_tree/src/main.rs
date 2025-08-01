@@ -1,22 +1,27 @@
+ use std::cell::RefCell;
+ use std::rc::Rc;
+
+ type NodeRef = Rc<RefCell<Node>>;
+
 #[derive(Debug)]
 struct Node {
     // Array of keys
     keys: Vec<i32>,
     // min degree ( defines thge range for the number of keys)
-    t: i32 ,
+    t: usize,
     // Array to child pointers
-    children: Vec<Box<Node>>,
+    children: Vec<NodeRef>,
     is_leaf: bool,
     // Pointer to next leaf Node
-    next: Option<Box<Node>>,
+    next: Option<NodeRef>,
 }
 
 impl Node {
-    fn new(t: i32, is_leaf: bool) -> Self {
+    fn new(t: usize, is_leaf: bool) -> Self {
         Self  {
             keys: Vec::new(),
             t,
-            children: Vec:: new(),
+            children: Vec::new(),
             is_leaf,
             next: None
         }
@@ -26,21 +31,27 @@ impl Node {
 #[derive(Debug)]
 struct BTree {
     // Pointer to root Node
-    root: Option<Box<Node>>,
+    root: NodeRef,
     // Min degree
-    t: i32,
+    t: usize,
 }
 
 impl BTree {
-    fn new(t: i32) -> Self {
+    fn new(t: usize) -> Self {
         Self {
-            root: Some(Box::new(Node::new(t, true))),
+            root: Rc::new(RefCell::new(Node::new(t, true))),
             t,
         }
     }
 
+    fn insertNonFull(&mut self, node: &NodeRef, key: i32) {
+        println!("{:?}", node);
+    }
+
     fn insert(&mut self, key: i32) {
-        println!("{:?}", self.root);
+        let root = Rc::clone(&self.root);
+        println!("{:?}", root);
+        self.insertNonFull(&root, key);
     }
 }
 
