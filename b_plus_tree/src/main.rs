@@ -48,22 +48,23 @@ impl BTree {
     }
 
     fn split_child(&mut self, parent: &NodeRef, index: usize) {
-        let t = selt.t;
+        let t = self.t;
         let mut parent_node = parent.borrow_mut();
-        let child_node = Rc::clone(&parent_node.children[index]).borrow_mut();
+        let child = Rc::clone(&parent_node.children[index]);
+        let mut child_node = child.borrow_mut();
 
         let mid_key = child_node.keys[t-1];
-        let new_child_node = Node::new(child_node.t, child_node.is_leaf);
+        let mut new_child_node = Node::new(child_node.t, child_node.is_leaf);
         new_child_node.keys.extend_from_slice(&child_node.keys[t..]);
         child_node.keys.truncate(t-1);
 
-        if (!child_node.is_leaf) {
+        if !child_node.is_leaf {
             new_child_node.children.extend_from_slice(&child_node.children[t..]);
-            child_node.truncate(t-1);
+            child_node.children.truncate(t-1);
         }
 
         parent_node.keys.insert(index, mid_key);
-        parent_node.children.insert(index+1, new_child_node)
+        parent_node.children.insert(index+1, Rc::new(RefCell::new(new_child_node)))
     }
 
     fn insert_non_full(&mut self, node: &NodeRef, key: i32) {
